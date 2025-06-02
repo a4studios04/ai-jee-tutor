@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI JEE Tutor</title>
+  <style>
+    body { font-family: Arial; padding: 30px; background: #f9f9f9; }
+    textarea, button { width: 100%; padding: 12px; margin: 12px 0; }
+    #result { background: #e8f5e9; padding: 20px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>🧠 Ask JEE AI Tutor</h1>
+  <textarea id="question" rows="6" placeholder="Type your JEE question..."></textarea>
+  <button onclick="ask()">Get Answer</button>
+  <div id="result"></div>
+
+  <script>
+    async function ask() {
+      const question = document.getElementById("question").value;
+      const res = await fetch("/api/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question })
+      });
+      const data = await res.json();
+      document.getElementById("result").innerText = data.answer || "No answer.";
+    }
+  </script>
+</body>
+</html>

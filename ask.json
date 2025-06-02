@@ -1,0 +1,32 @@
+import { OpenAI } from "openai";
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+export default async function handler(req, res) {
+  const { question } = req.body;
+
+  try {
+    const chat = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an expert AI tutor specialized in solving JEE Main and Advanced questions with full step-by-step explanations in Physics, Chemistry, and Math."
+        },
+        {
+          role: "user",
+          content: question
+        }
+      ],
+      temperature: 0.3
+    });
+
+    res.status(200).json({ answer: chat.choices[0].message.content });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+}
